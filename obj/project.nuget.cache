@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "d4f3REiRgDQb8QJcCDre82wAf7YQcCY4VdCcmp0pegOdIt9ePRwk4+zLTG2pHNCHpyk2Nn8jHeRvO8HBIODj1g==",
+  "success": true,
+  "projectFilePath": "D:\\Faculdade\\software visual\\projeto_semestre\\backend\\backend.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Vinic\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "C:\\Users\\Vinic\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\Vinic\\.nuget\\packages\\swashbuckle.aspnetcore\\5.6.3\\swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
+    "C:\\Users\\Vinic\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\5.6.3\\swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
+    "C:\\Users\\Vinic\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\5.6.3\\swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",
+    "C:\\Users\\Vinic\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\5.6.3\\swashbuckle.aspnetcore.swaggerui.5.6.3.nupkg.sha512"
+  ],
+  "logs": []
+}
