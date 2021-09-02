@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using server.Models;
 
 namespace server.Data
 {
@@ -7,6 +8,8 @@ namespace server.Data
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) {
         }
+
+        public DbSet<Produto> Produtos { get; set; }
         
     }
 }
