@@ -33,9 +33,9 @@ namespace server.Controllers
         [Route("findById/{id?}")]
         public Produto GetById(int id) => _context.Produtos.Find(id);
 
-        [HttpPost]
-        [Route("edit")]
-        public Produto Edit(Produto produto)
+        [HttpPut]
+        [Route("update")]
+        public Produto Update(Produto produto)
         {
             Produto produtoOriginal = GetById(produto.Id);
 
@@ -47,9 +47,9 @@ namespace server.Controllers
             return produtoOriginal;
         }
 
-        [HttpPost]
-        [Route("remove/{id?}")]
-        public Produto Remove(int id)
+        [HttpDelete]
+        [Route("delete/{id?}")]
+        public Produto Delete(int id)
         {
             Produto produto = GetById(id);
             _context.Produtos.Remove(produto);
