@@ -33,7 +33,7 @@ namespace backend
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,
-                                builder => builder.AllowAnyOrigin());
+                                builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
 
             services.AddControllers();
