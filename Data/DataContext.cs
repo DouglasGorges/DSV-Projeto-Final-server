@@ -9,7 +9,7 @@ namespace server.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) {
         }
 
-        public DbSet<Produto> Produtos { get; set; }
+        public DbSet<ContaCorrente> ContasCorrentes { get; set; }
         
     }
 }
