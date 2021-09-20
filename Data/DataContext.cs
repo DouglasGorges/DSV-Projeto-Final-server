@@ -10,6 +10,8 @@ namespace server.Data
         }
 
         public DbSet<ContaCorrente> ContasCorrentes { get; set; }
+        public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Transacao> Transacoes { get; set; }
         
     }
 }
