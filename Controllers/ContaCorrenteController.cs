@@ -10,7 +10,7 @@ namespace server.Controllers
 
     [ApiController]
     [Route("server/contaCorrente")]
-    public class ContaCorrenteController
+    public class ContaCorrenteController : ControllerBase
     {
         private readonly DataContext _context;
         private TransacaoController _transacaoController;

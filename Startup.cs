@@ -40,7 +40,7 @@ namespace backend
             
             services.AddDbContext<DataContext>
             (
-                options => options.UseInMemoryDatabase("databaseString")
+                options => options.UseSqlServer(Configuration.GetConnectionString("Azure"))
             );
 
             services.AddSwaggerGen(c =>

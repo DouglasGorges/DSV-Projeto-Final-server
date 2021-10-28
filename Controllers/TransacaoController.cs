@@ -11,7 +11,7 @@ namespace server.Controllers
 
     [ApiController]
     [Route("server/transacao")]
-    public class TransacaoController
+    public class TransacaoController : ControllerBase
     {
         private readonly DataContext _context;
         private CategoriaController _categoriaController;

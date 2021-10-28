@@ -10,11 +10,10 @@ namespace server.Controllers
 
     [ApiController]
     [Route("server/categoria")]
-    public class CategoriaController
+    public class CategoriaController : ControllerBase
     {
         private readonly DataContext _context;
-        private TransacaoController _transacaoController;
-        private TransacaoUtil _transacaoUtil;
+        private readonly TransacaoUtil _transacaoUtil = new TransacaoUtil();
 
         public CategoriaController(DataContext context) => _context = context;
 

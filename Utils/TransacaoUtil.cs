@@ -8,8 +8,8 @@ namespace server.Utils
 {
     public class TransacaoUtil
     {
-         private TransacaoController _transacaoController;
-          private CategoriaUtil _categoriaUtil;
+        private TransacaoController _transacaoController;
+        private readonly CategoriaUtil _categoriaUtil = new CategoriaUtil();
 
         public bool ExisteTransacaoComACategoria(Categoria categoria) {
             bool existeTransacaoComACategoria = false;
