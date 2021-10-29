@@ -4,6 +4,7 @@ using server.Data;
 using server.Models;
 using server.Utils;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace server.Controllers
 {
@@ -13,9 +14,12 @@ namespace server.Controllers
     public class CategoriaController : ControllerBase
     {
         private readonly DataContext _context;
-        private readonly TransacaoUtil _transacaoUtil = new TransacaoUtil();
+        TransacaoUtil _transacaoUtil;
 
-        public CategoriaController(DataContext context) => _context = context;
+        public CategoriaController(DataContext context){
+            _context = context;
+            _transacaoUtil = new TransacaoUtil(_context);
+        }
 
         [HttpPost]
         [Route("create")]
@@ -47,9 +51,11 @@ namespace server.Controllers
         public Categoria Update(Categoria categoria)
         {
             Categoria categoriaOriginal = GetById(categoria.Id);
-
-            categoriaOriginal.Nome = categoria.Nome;
-            categoriaOriginal.Cor = categoria.Cor;
+            
+            if(categoria.Nome != null)
+                categoriaOriginal.Nome = categoria.Nome;
+            if(categoria.Cor != null)
+                categoriaOriginal.Cor = categoria.Cor;
             categoriaOriginal.Ativo = categoria.Ativo;
 
             _context.Categorias.Update(categoriaOriginal);

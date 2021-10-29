@@ -9,6 +9,7 @@ namespace server.Models
         public int Id { get; set;}
         public string Descricao { get; set;}
         public ContaCorrente ContaCorrente { get; set;}
+        public int idContaCorrente { get; set; }
         public List<Categoria> ListaCategorias { get; set;}
         public double Valor { get; set;}
         public DateTime DataVencimento { get; set;}

@@ -14,8 +14,6 @@ namespace server.Controllers
     public class TransacaoController : ControllerBase
     {
         private readonly DataContext _context;
-        private CategoriaController _categoriaController;
-        private CategoriaUtil _categoriaUtil;
 
         public TransacaoController(DataContext context) => _context = context;
 
@@ -23,6 +21,18 @@ namespace server.Controllers
         [Route("create")]
         public Transacao Create(Transacao transacao)
         {
+            transacao.ContaCorrente = _context.ContasCorrentes.Find(transacao.idContaCorrente);
+
+            List<int> listaIdsCategorias = new List<int>();
+            transacao.ListaCategorias.ForEach(delegate(Categoria categoria){
+                listaIdsCategorias.Add(categoria.Id);
+            });
+
+            transacao.ListaCategorias.Clear();
+            listaIdsCategorias.ForEach(delegate(int idCategoria){
+                transacao.ListaCategorias.Add(_context.Categorias.Find(idCategoria));
+            });
+            
             _context.Transacoes.Add(transacao);
             _context.SaveChanges();
             return transacao;

@@ -4,6 +4,7 @@ using server.Data;
 using server.Models;
 using server.Utils;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace server.Controllers
 {
@@ -13,10 +14,12 @@ namespace server.Controllers
     public class ContaCorrenteController : ControllerBase
     {
         private readonly DataContext _context;
-        private TransacaoController _transacaoController;
         private TransacaoUtil _transacaoUtil;
 
-        public ContaCorrenteController(DataContext context) => _context = context;
+        public ContaCorrenteController(DataContext context) {
+            _context = context;
+            _transacaoUtil = new TransacaoUtil(_context);
+        }
 
         [HttpPost]
         [Route("create")]
@@ -41,8 +44,10 @@ namespace server.Controllers
         {
             ContaCorrente contaCorrenteOriginal = GetById(contaCorrente.Id);
 
-            contaCorrenteOriginal.Nome = contaCorrente.Nome;
-            contaCorrenteOriginal.SaldoInicial = contaCorrente.SaldoInicial;
+            if(contaCorrente.Nome != null)
+                contaCorrenteOriginal.Nome = contaCorrente.Nome;
+            
+            //contaCorrenteOriginal.SaldoInicial = contaCorrente.SaldoInicial; TODO Como diferenciar o ZERO digitado pelo instanciado?
 
             _context.ContasCorrentes.Update(contaCorrenteOriginal);
             _context.SaveChanges();
@@ -68,7 +73,7 @@ namespace server.Controllers
         }
 
         [HttpPost]
-        [Route("saldo")]
+        [Route("saldoTotal")]
         public double CalcularSaldoTotal() {
             double saldo = 0;
 
@@ -76,15 +81,18 @@ namespace server.Controllers
 
             listaContasCorrentes.ForEach(delegate(ContaCorrente contaCorrente){
                 if(contaCorrente.Ativo){
-                    saldo += CalcularSaldoContaCorrente(new FiltroPesquisa(contaCorrente));
+                    double a = CalcularSaldoContaCorrente(new FiltroPesquisa(contaCorrente));
+                    Console.WriteLine("Saldo da conta " + contaCorrente.Nome + ": " + a);
+                    saldo += a;
+                    Console.WriteLine("Saldo TOTAL: " + saldo);
                 }
             });
 
             return saldo;
         }
 
-        [HttpGet]
-        [Route("saldo/{id?}")]
+        [HttpPost]
+        [Route("saldo")]
         public double CalcularSaldoContaCorrente(FiltroPesquisa filtro) {
 
             ContaCorrente contaCorrente = GetById(filtro.ContaCorrente.Id);

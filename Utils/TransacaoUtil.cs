@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using server.Data;
 using server.Models;
 using server.Controllers;
 
@@ -9,12 +10,18 @@ namespace server.Utils
     public class TransacaoUtil
     {
         private TransacaoController _transacaoController;
+        private readonly DataContext _context;
         private readonly CategoriaUtil _categoriaUtil = new CategoriaUtil();
+        public TransacaoUtil(DataContext context){
+            _context = context;
+            _transacaoController = new TransacaoController(_context);
+        }
 
         public bool ExisteTransacaoComACategoria(Categoria categoria) {
             bool existeTransacaoComACategoria = false;
 
-            List<Transacao> listaTransacoes = _transacaoController.List();
+            List<Transacao> listaTransacoes = _context.Transacoes.ToList();
+
             listaTransacoes.ForEach(delegate(Transacao transacao) {
                 transacao.ListaCategorias.ForEach(delegate(Categoria itemCategoria){
                     if(itemCategoria.Equals(categoria)){

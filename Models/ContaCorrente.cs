@@ -3,7 +3,7 @@ namespace server.Models
 {
     public class ContaCorrente
     {
-        public ContaCorrente() { CriadoEm = DateTime.Now; Ativo = true; SaldoInicial = 0; }
+        public ContaCorrente() { CriadoEm = DateTime.Now; Ativo = true; }
 
         public int Id { get; set;}
         public string Nome { get; set;}
