@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+
 namespace server.Models
 {
     public class Categoria
@@ -9,6 +11,8 @@ namespace server.Models
         public string Nome { get; set;}
         public string Cor { get; set;}
         public bool Ativo { get; set;}
+        public virtual ICollection<Transacao> Transacoes { get; set;}
+        public List<CategoriaTransacao> CategoriasTransacoes { get; set;}
         public DateTime CriadoEm { get; set;}
 
         public override string ToString() =>

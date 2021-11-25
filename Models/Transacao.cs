@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 namespace server.Models
 {
     public class Transacao
@@ -9,11 +10,11 @@ namespace server.Models
         public int Id { get; set;}
         public string Descricao { get; set;}
         public ContaCorrente ContaCorrente { get; set;}
-        public int idContaCorrente { get; set; }
-        public List<Categoria> ListaCategorias { get; set;}
+        public virtual ICollection<Categoria> Categorias { get; set;}
+        public List<CategoriaTransacao> CategoriasTransacoes { get; set;}
         public double Valor { get; set;}
         public DateTime DataVencimento { get; set;}
-        public DateTime DataPagamento { get; set;}
+        public DateTime? DataPagamento { get; set;}
         public DateTime CriadoEm { get; set;}
 
         public override string ToString() =>

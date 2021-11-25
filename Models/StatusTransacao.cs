@@ -3,6 +3,9 @@ namespace server.Models
 {
     public enum StatusTransacao
     {
-        Pago, Nao_Pago, Atrasado, Todos   
+        Todos = 0 ,
+        Nao_Pago = 1,
+        Pago = 2 , 
+        Atrasado = 3,  
     }
 }

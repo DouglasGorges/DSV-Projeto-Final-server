@@ -33,6 +33,7 @@ namespace server.Controllers
         [HttpGet]
         [Route("list")]
         public List<ContaCorrente> List() => _context.ContasCorrentes.ToList();
+        public List<ContaCorrente> ListarAtivas() => _context.ContasCorrentes.Where(cc => cc.Ativo).ToList();
 
         [HttpGet]
         [Route("findById/{id?}")]
@@ -46,6 +47,8 @@ namespace server.Controllers
 
             if(contaCorrente.Nome != null)
                 contaCorrenteOriginal.Nome = contaCorrente.Nome;
+            if(contaCorrente.Ativo != contaCorrenteOriginal.Ativo)
+                contaCorrenteOriginal.Ativo = contaCorrente.Ativo;
             
             //contaCorrenteOriginal.SaldoInicial = contaCorrente.SaldoInicial; TODO Como diferenciar o ZERO digitado pelo instanciado?
 
@@ -77,15 +80,11 @@ namespace server.Controllers
         public double CalcularSaldoTotal() {
             double saldo = 0;
 
-            List<ContaCorrente> listaContasCorrentes = List();
+            List<ContaCorrente> listaContasCorrentes = ListarAtivas();
 
             listaContasCorrentes.ForEach(delegate(ContaCorrente contaCorrente){
-                if(contaCorrente.Ativo){
-                    double a = CalcularSaldoContaCorrente(new FiltroPesquisa(contaCorrente));
-                    Console.WriteLine("Saldo da conta " + contaCorrente.Nome + ": " + a);
+                    double a = CalcularSaldoContaCorrente(new FiltroPesquisa(contaCorrente, StatusTransacao.Pago));
                     saldo += a;
-                    Console.WriteLine("Saldo TOTAL: " + saldo);
-                }
             });
 
             return saldo;

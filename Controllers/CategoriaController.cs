@@ -5,6 +5,7 @@ using server.Models;
 using server.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace server.Controllers
 {
@@ -32,17 +33,8 @@ namespace server.Controllers
 
         [HttpGet]
         [Route("list")]
-        public List<Categoria> List() {
-            List<Categoria> listaCategorias = _context.Categorias.ToList();
-            List<Categoria> listaCategoriasAtivas = new List<Categoria>();
-
-            listaCategorias.ForEach(delegate(Categoria categoria){
-                if(categoria.Ativo){
-                    listaCategoriasAtivas.Add(categoria);
-                }
-            });
-            return listaCategoriasAtivas;
-            }
+        public List<Categoria> List() => _context.Categorias.ToList();
+        // public List<Categoria> List() => _context.Categorias.Where(c => c.Ativo).ToList();
 
         private Categoria GetById(int id) => _context.Categorias.Find(id);
 

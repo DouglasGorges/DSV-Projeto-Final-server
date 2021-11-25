@@ -5,6 +5,7 @@ using server.Data;
 using server.Models;
 using server.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace server.Controllers
 {
@@ -21,18 +22,20 @@ namespace server.Controllers
         [Route("create")]
         public Transacao Create(Transacao transacao)
         {
-            transacao.ContaCorrente = _context.ContasCorrentes.Find(transacao.idContaCorrente);
+            transacao.ContaCorrente = _context.ContasCorrentes.Find(transacao.ContaCorrente.Id);
 
             List<int> listaIdsCategorias = new List<int>();
-            transacao.ListaCategorias.ForEach(delegate(Categoria categoria){
+            transacao.Categorias.ToList().ForEach(delegate (Categoria categoria)
+            {
                 listaIdsCategorias.Add(categoria.Id);
             });
 
-            transacao.ListaCategorias.Clear();
-            listaIdsCategorias.ForEach(delegate(int idCategoria){
-                transacao.ListaCategorias.Add(_context.Categorias.Find(idCategoria));
+            transacao.Categorias.Clear();
+            listaIdsCategorias.ForEach(delegate (int idCategoria)
+            {
+                transacao.Categorias.Add(_context.Categorias.Find(idCategoria));
             });
-            
+
             _context.Transacoes.Add(transacao);
             _context.SaveChanges();
             return transacao;
@@ -40,7 +43,7 @@ namespace server.Controllers
 
         [HttpGet]
         [Route("list")]
-        public List<Transacao> List() => _context.Transacoes.ToList();
+        public List<Transacao> List() => _context.Transacoes.Include(t => t.Categorias).Include(t => t.ContaCorrente).ToList();
 
         [HttpGet]
         [Route("findById/{id?}")]
@@ -54,7 +57,7 @@ namespace server.Controllers
 
             transacaoOriginal.Descricao = transacao.Descricao;
             transacaoOriginal.ContaCorrente = transacao.ContaCorrente;
-            transacaoOriginal.ListaCategorias = transacao.ListaCategorias;
+            transacaoOriginal.Categorias = transacao.Categorias;
             transacaoOriginal.Valor = transacao.Valor;
             transacaoOriginal.DataVencimento = transacao.DataVencimento;
             transacaoOriginal.DataPagamento = transacao.DataPagamento;

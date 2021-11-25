@@ -23,7 +23,7 @@ namespace server.Utils
             List<Transacao> listaTransacoes = _context.Transacoes.ToList();
 
             listaTransacoes.ForEach(delegate(Transacao transacao) {
-                transacao.ListaCategorias.ForEach(delegate(Categoria itemCategoria){
+                transacao.Categorias.ToList().ForEach(delegate(Categoria itemCategoria){
                     if(itemCategoria.Equals(categoria)){
                         existeTransacaoComACategoria = true;
                     }
@@ -51,11 +51,13 @@ namespace server.Utils
             List<Transacao> listaTransacoesFiltradas = new List<Transacao>();
 
             listaTransacoes.ForEach(delegate(Transacao transacao){
-                if(matchContaCorrente(transacao, filtro)
-                        || matchCategorias(transacao.ListaCategorias, filtro)
-                        || matchStatusTransacao(transacao, filtro)
-                        || matchDtVcto(transacao.DataVencimento, filtro)
-                        || matchDtPgto(transacao.DataPagamento, filtro)){
+                
+                if((!listaTransacoesFiltradas.Contains(transacao)
+                        && matchContaCorrente(transacao, filtro)
+                        && matchCategorias(transacao.Categorias.ToList(), filtro)
+                        && matchStatusTransacao(transacao, filtro)
+                        && matchDtVcto(transacao.DataVencimento, filtro)
+                        && matchDtPgto(transacao.DataPagamento, filtro))){
                     listaTransacoesFiltradas.Add(transacao);
                 } 
             });
@@ -63,17 +65,22 @@ namespace server.Utils
             return listaTransacoesFiltradas;
         }
 
-        private bool matchContaCorrente(Transacao transacao, FiltroPesquisa filtro){
-            return (transacao.ContaCorrente != null && transacao.ContaCorrente.Equals(filtro.ContaCorrente));
-        }
+        private bool matchContaCorrente(Transacao transacao, FiltroPesquisa filtro) => filtro.ContaCorrente == null || (transacao.ContaCorrente != null && transacao.ContaCorrente.Equals(filtro.ContaCorrente));
 
         private bool matchCategorias(List<Categoria> listaCategorias, FiltroPesquisa filtro){
+            if(filtro.ListaCategorias == null || !filtro.ListaCategorias.Any()){
+                return true;
+            }
+
             return (listaCategorias != null && listaCategorias.Any() && _categoriaUtil.hasMatch(listaCategorias, filtro.ListaCategorias));
         }
 
         private bool matchStatusTransacao(Transacao transacao, FiltroPesquisa filtro){
+            if(filtro.StatusTransacao == StatusTransacao.Todos){
+                return true;
+            }
+        
             StatusTransacao statusTransacao;
-            
             if(transacao.DataPagamento == null){
                 statusTransacao = StatusTransacao.Nao_Pago;
                 if(DateTime.Now > transacao.DataVencimento){
@@ -83,14 +90,14 @@ namespace server.Utils
                 statusTransacao = StatusTransacao.Pago;
             }
 
-            return statusTransacao.Equals(filtro.StatusTransacao) || filtro.StatusTransacao.Equals(StatusTransacao.Todos);
+            return statusTransacao.Equals(filtro.StatusTransacao);
         }
 
         private bool matchDtVcto(DateTime dtVcto, FiltroPesquisa filtro){
             return (filtro.DtVctoInicial == null || dtVcto >= filtro.DtVctoInicial) && (filtro.DtVctoFinal == null || dtVcto <= filtro.DtVctoFinal);
         }
 
-        private bool matchDtPgto(DateTime dtPgto, FiltroPesquisa filtro){
+        private bool matchDtPgto(DateTime? dtPgto, FiltroPesquisa filtro){
             return (filtro.DtPgtoInicial == null || dtPgto >= filtro.DtPgtoInicial) && (filtro.DtPgtoFinal == null || dtPgto <= filtro.DtPgtoFinal);
         }
     }
