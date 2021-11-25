@@ -4,6 +4,7 @@ using server.Data;
 using server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace server.Controllers
 {
@@ -20,7 +21,7 @@ namespace server.Controllers
         [Route("create")]
         public Transacao Create(Transacao transacao)
         {
-            /*
+
             transacao.ContaCorrente = _context.ContasCorrentes.Find(transacao.ContaCorrente.Id);
 
             List<int> listaIdsCategorias = new List<int>();
@@ -34,7 +35,6 @@ namespace server.Controllers
             {
                 transacao.Categorias.Add(_context.Categorias.Find(idCategoria));
             });
-            */
 
             _context.Transacoes.Add(transacao);
             _context.SaveChanges();
@@ -55,12 +55,18 @@ namespace server.Controllers
         {
             Transacao transacaoOriginal = GetById(transacao.Id);
 
-            transacaoOriginal.Descricao = transacao.Descricao;
-            transacaoOriginal.ContaCorrente = transacao.ContaCorrente;
-            transacaoOriginal.Categorias = transacao.Categorias;
-            transacaoOriginal.Valor = transacao.Valor;
-            transacaoOriginal.DataVencimento = transacao.DataVencimento;
-            transacaoOriginal.DataPagamento = transacao.DataPagamento;
+            if (transacao.Descricao != null)
+                transacaoOriginal.Descricao = transacao.Descricao;
+            if (transacao.ContaCorrente != null)
+                transacaoOriginal.ContaCorrente = transacao.ContaCorrente;
+            if (transacao.Categorias != null && transacao.Categorias.Any())
+                transacaoOriginal.Categorias = transacao.Categorias;
+            if (transacao.Valor != null)
+                transacaoOriginal.Valor = transacao.Valor;
+            if (DateTime.Compare(transacao.DataVencimento, DateTime.Parse("01/01/0001 00:00:00")) != 0)
+                transacaoOriginal.DataVencimento = transacao.DataVencimento;
+            if (transacao.DataPagamento != null)
+                transacaoOriginal.DataPagamento = transacao.DataPagamento;
 
             _context.Transacoes.Update(transacaoOriginal);
             _context.SaveChanges();

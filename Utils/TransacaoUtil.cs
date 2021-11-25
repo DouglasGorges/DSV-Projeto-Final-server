@@ -61,7 +61,6 @@ namespace server.Utils
 
             listaTransacoes.ForEach(delegate (Transacao transacao)
             {
-
                 if ((!listaTransacoesFiltradas.Contains(transacao)
                         && matchContaCorrente(transacao, filtro)
                         && matchCategorias(transacao.Categorias.ToList(), filtro)
@@ -76,7 +75,7 @@ namespace server.Utils
             return listaTransacoesFiltradas;
         }
 
-        private bool matchContaCorrente(Transacao transacao, FiltroPesquisa filtro) => filtro.ContaCorrente == null || (transacao.ContaCorrente != null && transacao.ContaCorrente.Equals(filtro.ContaCorrente));
+        private bool matchContaCorrente(Transacao transacao, FiltroPesquisa filtro) => filtro.ContaCorrente == null || (transacao.ContaCorrente != null && transacao.ContaCorrente.Id == filtro.ContaCorrente.Id);
 
         private bool matchCategorias(List<Categoria> listaCategorias, FiltroPesquisa filtro)
         {

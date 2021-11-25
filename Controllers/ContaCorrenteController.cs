@@ -50,8 +50,8 @@ namespace server.Controllers
                 contaCorrenteOriginal.Nome = contaCorrente.Nome;
             if (contaCorrente.Ativo != contaCorrenteOriginal.Ativo)
                 contaCorrenteOriginal.Ativo = contaCorrente.Ativo;
-
-            //contaCorrenteOriginal.SaldoInicial = contaCorrente.SaldoInicial; TODO Como diferenciar o ZERO digitado pelo instanciado?
+            if (contaCorrente.SaldoInicial != null)
+                contaCorrenteOriginal.SaldoInicial = contaCorrente.SaldoInicial;
 
             _context.ContasCorrentes.Update(contaCorrenteOriginal);
             _context.SaveChanges();
@@ -99,12 +99,13 @@ namespace server.Controllers
         public double CalcularSaldoContaCorrente(FiltroPesquisa filtro)
         {
             ContaCorrente contaCorrente = GetById(filtro.ContaCorrente.Id);
-            double saldoContaCorrente = contaCorrente.SaldoInicial;
+            double saldoContaCorrente = contaCorrente.SaldoInicial.GetValueOrDefault(0);
 
             List<Transacao> listaTransacoes = _transacaoUtil.buscarTransacoesFiltradas(filtro);
             listaTransacoes.ForEach(delegate (Transacao transacao)
             {
-                saldoContaCorrente += transacao.Valor;
+                if (transacao.Valor != null)
+                    saldoContaCorrente += transacao.Valor.GetValueOrDefault(0);
             });
 
             return saldoContaCorrente;

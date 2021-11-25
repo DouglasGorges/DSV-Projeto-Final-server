@@ -12,7 +12,7 @@ namespace server.Models
         public ContaCorrente ContaCorrente { get; set;}
         public virtual ICollection<Categoria> Categorias { get; set;}
         public List<CategoriaTransacao> CategoriasTransacoes { get; set;}
-        public double Valor { get; set;}
+        public double? Valor { get; set;}
         public DateTime DataVencimento { get; set;}
         public DateTime? DataPagamento { get; set;}
         public DateTime CriadoEm { get; set;}

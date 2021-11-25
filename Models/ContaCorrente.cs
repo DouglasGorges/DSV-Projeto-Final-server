@@ -8,7 +8,7 @@ namespace server.Models
 
         public int Id { get; set; }
         public string Nome { get; set; }
-        public double SaldoInicial { get; set; }
+        public double? SaldoInicial { get; set; }
         public bool Ativo { get; set; }
         public DateTime CriadoEm { get; set; }
 
