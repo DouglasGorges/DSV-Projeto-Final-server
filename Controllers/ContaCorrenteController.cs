@@ -34,6 +34,8 @@ namespace server.Controllers
         [Route("list")]
         public List<ContaCorrente> List() => _context.ContasCorrentes.ToList();
 
+        [HttpGet]
+        [Route("listarAtivas")]
         public List<ContaCorrente> ListarAtivas() => _context.ContasCorrentes.Where(cc => cc.Ativo).ToList();
 
         [HttpGet]
