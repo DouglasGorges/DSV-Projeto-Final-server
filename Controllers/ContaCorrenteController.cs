@@ -4,7 +4,6 @@ using server.Data;
 using server.Models;
 using server.Utils;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace server.Controllers
 {
@@ -16,7 +15,8 @@ namespace server.Controllers
         private readonly DataContext _context;
         private TransacaoUtil _transacaoUtil;
 
-        public ContaCorrenteController(DataContext context) {
+        public ContaCorrenteController(DataContext context)
+        {
             _context = context;
             _transacaoUtil = new TransacaoUtil(_context);
         }
@@ -33,6 +33,7 @@ namespace server.Controllers
         [HttpGet]
         [Route("list")]
         public List<ContaCorrente> List() => _context.ContasCorrentes.ToList();
+
         public List<ContaCorrente> ListarAtivas() => _context.ContasCorrentes.Where(cc => cc.Ativo).ToList();
 
         [HttpGet]
@@ -45,11 +46,11 @@ namespace server.Controllers
         {
             ContaCorrente contaCorrenteOriginal = GetById(contaCorrente.Id);
 
-            if(contaCorrente.Nome != null)
+            if (contaCorrente.Nome != null)
                 contaCorrenteOriginal.Nome = contaCorrente.Nome;
-            if(contaCorrente.Ativo != contaCorrenteOriginal.Ativo)
+            if (contaCorrente.Ativo != contaCorrenteOriginal.Ativo)
                 contaCorrenteOriginal.Ativo = contaCorrente.Ativo;
-            
+
             //contaCorrenteOriginal.SaldoInicial = contaCorrente.SaldoInicial; TODO Como diferenciar o ZERO digitado pelo instanciado?
 
             _context.ContasCorrentes.Update(contaCorrenteOriginal);
@@ -61,13 +62,15 @@ namespace server.Controllers
         [Route("delete/{id?}")]
         public ContaCorrente Delete(int id)
         {
-
             ContaCorrente contaCorrente = GetById(id);
-            
-            if(_transacaoUtil.ExisteTransacaoComAContaCorrente(contaCorrente)){
+
+            if (_transacaoUtil.ExisteTransacaoComAContaCorrente(contaCorrente))
+            {
                 contaCorrente.Ativo = false;
                 _context.ContasCorrentes.Update(contaCorrente);
-            } else {
+            }
+            else
+            {
                 _context.ContasCorrentes.Remove(contaCorrente);
                 _context.SaveChanges();
             }
@@ -77,14 +80,15 @@ namespace server.Controllers
 
         [HttpPost]
         [Route("saldoTotal")]
-        public double CalcularSaldoTotal() {
+        public double CalcularSaldoTotal()
+        {
             double saldo = 0;
 
             List<ContaCorrente> listaContasCorrentes = ListarAtivas();
-
-            listaContasCorrentes.ForEach(delegate(ContaCorrente contaCorrente){
-                    double a = CalcularSaldoContaCorrente(new FiltroPesquisa(contaCorrente, StatusTransacao.Pago));
-                    saldo += a;
+            listaContasCorrentes.ForEach(delegate (ContaCorrente contaCorrente)
+            {
+                double a = CalcularSaldoContaCorrente(new FiltroPesquisa(contaCorrente, StatusTransacao.Pago));
+                saldo += a;
             });
 
             return saldo;
@@ -92,14 +96,14 @@ namespace server.Controllers
 
         [HttpPost]
         [Route("saldo")]
-        public double CalcularSaldoContaCorrente(FiltroPesquisa filtro) {
-
+        public double CalcularSaldoContaCorrente(FiltroPesquisa filtro)
+        {
             ContaCorrente contaCorrente = GetById(filtro.ContaCorrente.Id);
             double saldoContaCorrente = contaCorrente.SaldoInicial;
 
             List<Transacao> listaTransacoes = _transacaoUtil.buscarTransacoesFiltradas(filtro);
-
-            listaTransacoes.ForEach(delegate(Transacao transacao){
+            listaTransacoes.ForEach(delegate (Transacao transacao)
+            {
                 saldoContaCorrente += transacao.Valor;
             });
 

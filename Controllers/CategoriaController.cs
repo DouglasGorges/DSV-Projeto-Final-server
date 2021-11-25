@@ -4,7 +4,6 @@ using server.Data;
 using server.Models;
 using server.Utils;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using Microsoft.EntityFrameworkCore;
 
 namespace server.Controllers

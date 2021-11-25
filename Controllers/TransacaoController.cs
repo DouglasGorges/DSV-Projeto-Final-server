@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using System;
 using System.Linq;
 using server.Data;
 using server.Models;
-using server.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +20,7 @@ namespace server.Controllers
         [Route("create")]
         public Transacao Create(Transacao transacao)
         {
+            /*
             transacao.ContaCorrente = _context.ContasCorrentes.Find(transacao.ContaCorrente.Id);
 
             List<int> listaIdsCategorias = new List<int>();
@@ -35,6 +34,7 @@ namespace server.Controllers
             {
                 transacao.Categorias.Add(_context.Categorias.Find(idCategoria));
             });
+            */
 
             _context.Transacoes.Add(transacao);
             _context.SaveChanges();
